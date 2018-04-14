@@ -33,22 +33,9 @@
         <meta name="msapplication-square310x310logo" content="images/icons/mstile-310x310.png">
 
         <link rel="stylesheet" href="vendor/bootstrap.min.css">
+        <link rel="stylesheet" href="style.css">
         <script defer src="vendor/jquery.min.js"></script>
         <script defer src="main.js"></script>
-
-        <style>
-            .spinner {
-                animation-name: spin;
-                animation-duration: 2000ms;
-                animation-iteration-count: infinite; 
-                animation-timing-function: linear;
-            }
-            @keyframes spin {
-                from { transform:rotate(0deg); }
-                to {transform:rotate(360deg); }
-            }
-        </style>
-
     </head>
 
     <body>
@@ -57,7 +44,9 @@
         <header class="navbar sticky-top navbar-expand bg-primary navbar-dark">
             <!-- Logo -->
             <img src="images/logo.png" alt="Giphygram" width="60" class="img-fluid navbar-brand">
-
+            <div class="search">
+                <input id="query" name="query" class="form-control" type="text" placeholder="Search" value="">
+            </div>
             <div id="update" class="ml-auto">
                 <a class="icon" href="#update"><img width="25" src="images/flame.png"></a>
                 <img class="icon d-none spinner" width="20" src="images/sync.png">
@@ -67,6 +56,13 @@
 
         <!-- Main Conatainer -->
         <main class="container p-1">
+            <!-- Search Suggestions -->
+            <div id="suggestions" class="text-center">
+                <span class="badge badge-light">Fav Searches</span>
+                <span class="badge badge-dark">funny</span>
+                <span class="badge badge-dark">trending</span>
+                <span class="badge badge-dark">anime</span>
+            </div>
 
             <!-- Error Alert -->
             <div class="alert alert-danger text-center m-1" style="display:none;">
