@@ -4,11 +4,23 @@ let giphy = {
   query: {
     api_key: "MCWAkBcf3WpQZIyYEqeakqcRLFotCEON",
     q: "funny",
-    limit: 15
+    limit: 15,
+    offset: 0
   }
 };
 
-// Update trending giphys
+// Update offset
+function updateOffset(reset = false) {
+  let offset = giphy["query"]["offset"];
+  if (!reset) {
+    offset += giphy["query"]["limit"];
+  } else {
+    offset = 0;
+  }
+  giphy["query"]["offset"] = offset;
+}
+
+// Update giphys
 function update() {
   // Toggle refresh state
   $("#update .icon").toggleClass("d-none");
@@ -18,12 +30,8 @@ function update() {
 
     // Success
     .done(function(res) {
-      // Empty Element
       $("#giphys").empty();
-
-      // Loop Giphys
       $.each(res.data, function(i, giphy) {
-        // Add Giphy HTML
         $("#giphys").prepend(
           '<div class="col-sm-6 col-md-4 col-lg-3 p-1">' +
             '<img class="w-100 img-fluid" src="' +
@@ -32,6 +40,7 @@ function update() {
             "</div>"
         );
       });
+      updateOffset();
     })
 
     // Failure
@@ -40,6 +49,7 @@ function update() {
       setTimeout(function() {
         $(".alert").slideUp();
       }, 2000);
+      updateOffset(true);
     })
 
     // Complete
@@ -61,8 +71,10 @@ update();
 // Display new search results
 function displayNewSearchResults(event) {
   let searchTerm = event.target.value;
-  if (giphy["query"]["q"] !== searchTerm) {
+  let currentSearch = giphy["query"]["q"];
+  if (searchTerm !== currentSearch && searchTerm !== "") {
     giphy["query"]["q"] = searchTerm;
+    updateOffset(true);
     update();
   }
 }
