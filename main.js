@@ -54,13 +54,13 @@ function update() {
 
       $.each(res.data, function(i, giphy) {
         // Add to latest giphys
-        latestGiphys.push(giphy.images.downsized_large.url);
+        latestGiphys.push(giphy.images.fixed_width.url);
 
         // Add giphy html
         $("#giphys").prepend(
           '<div class="col-sm-6 col-md-4 col-lg-3 p-1">' +
             '<img class="w-100 img-fluid" src="' +
-            giphy.images.downsized_large.url +
+            giphy.images.fixed_width.url +
             '">' +
             "</div>"
         );
