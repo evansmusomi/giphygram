@@ -1,3 +1,8 @@
+// Progressive enhancement
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register("sw.js").catch(console.error);
+}
+
 // Giphy API object
 let giphy = {
   url: "https://api.giphy.com/v1/gifs/search",
