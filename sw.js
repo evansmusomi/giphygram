@@ -32,24 +32,45 @@ self.addEventListener("activate", e => {
   e.waitUntil(cleaned);
 });
 
-// Static cache strategy - Cache with network fallback
-const staticCache = request => {
+// Cache with network fallback strategy
+const staticCache = (request, cacheName = `static-${version}`) => {
   return caches.match(request).then(cachedResponse => {
     if (cachedResponse) return cachedResponse;
 
     return fetch(request).then(networkResponse => {
-      caches
-        .open(`static-${version}`)
-        .then(cache => cache.put(request, networkResponse));
+      caches.open(cacheName).then(cache => cache.put(request, networkResponse));
       return networkResponse.clone();
     });
   });
 };
 
+// Network with cache fallback strategy
+const fallbackCache = request => {
+  return fetch(request)
+    .then(networkResponse => {
+      if (!networkResponse.ok) throw "Fetch Error";
+
+      caches
+        .open(`static-${version}`)
+        .then(cache => cache.put(request, networkResponse));
+
+      return networkResponse.clone();
+    })
+    .catch(err => caches.match(request));
+};
+
 // SW fetch
 self.addEventListener("fetch", e => {
-  // Use cache with network fallback strategy for App Shell
+  // App shell
   if (e.request.url.match(location.origin)) {
     e.respondWith(staticCache(e.request));
+
+    // Giphy API
+  } else if (e.request.url.match("api.giphy.com/v1/gifs/search")) {
+    e.respondWith(fallbackCache(e.request));
+
+    // Giphy Media
+  } else if (e.request.url.match("giphy.com/media")) {
+    e.respondWith(staticCache(e.request, "giphy"));
   }
 });
