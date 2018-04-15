@@ -9,6 +9,7 @@ const appAssets = [
   "images/flame.png",
   "images/logo.png",
   "images/sync.png",
+  "images/placeholder.gif",
   "vendor/bootstrap.min.css",
   "vendor/jquery.min.js"
 ];
@@ -37,10 +38,19 @@ const staticCache = (request, cacheName = `static-${version}`) => {
   return caches.match(request).then(cachedResponse => {
     if (cachedResponse) return cachedResponse;
 
-    return fetch(request).then(networkResponse => {
-      caches.open(cacheName).then(cache => cache.put(request, networkResponse));
-      return networkResponse.clone();
-    });
+    return fetch(request)
+      .then(networkResponse => {
+        caches
+          .open(cacheName)
+          .then(cache => cache.put(request, networkResponse));
+        return networkResponse.clone();
+      })
+      .catch(err => {
+        if (request.url.match("giphy.com/media")) {
+          return caches.match("images/placeholder.gif");
+        }
+        console.log(error);
+      });
   });
 };
 
