@@ -61,6 +61,8 @@ function update() {
           '<div class="col-sm-6 col-md-4 col-lg-3 p-1">' +
             '<img class="w-100 img-fluid" src="' +
             giphy.images.fixed_width.url +
+            '" alt="' +
+            giphy.title +
             '">' +
             "</div>"
         );

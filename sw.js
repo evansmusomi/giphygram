@@ -1,10 +1,9 @@
 // SW version
-const version = "1.1";
+const version = "1.2";
 
 // Static cache - App shell
 const appAssets = [
   "index.html",
-  "style.css",
   "main.js",
   "images/flame.png",
   "images/logo.png",
